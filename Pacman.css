@@ -1,0 +1,84 @@
+body {
+	background-color: black;
+	margin: 0px;
+}
+.row div{
+	width: 20px;
+	height: 20px;
+	border: 1px solid black;
+	display: inline-block;
+}
+.brick {
+	background-color: blue;
+}
+.coin {
+	background: url('coinimage.gif');
+	background-repeat: no-repeat;
+	background-position: center;
+}
+.cherry {
+	background: url('cherry.png');
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+#pacman {
+	background: url('Pacman.gif');
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
+	position: absolute;
+	width: 20px;
+	height: 20px;
+	transform: rotate(0deg);
+}
+#ghost {
+	background: url('ghost.png');
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
+	position: absolute;
+	width: 20px;
+	height: 20px;
+}
+#ghost2 {
+	background: url('ghostteal.png');
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
+	position: absolute;
+	width: 20px;
+	height: 20px;
+}
+
+.empty {
+
+}
+#score {
+	border: 1px solid white;
+	height: 20px;
+	width: 100px;
+	color: white;
+	padding: 7px;
+	text-align: center;
+	display: inline-block;
+}
+
+#life {
+	border: 1px solid white;
+	height: 20px;
+	width: 100px;
+	color: white;
+	padding: 7px;
+	text-align: center;
+	display: inline-block;
+}
+#countmoves {
+	border: 1px solid white;
+	height: 20px;
+	width: 100px;
+	color: white;
+	padding: 7px;
+	text-align: center;
+	display: inline-block;
+}

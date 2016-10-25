@@ -1,0 +1,358 @@
+<html>
+<head>
+	<title>Pacman Demo</title>
+	<link rel="stylesheet" type="text/css" href="Pacman.css">
+</head>
+<body>
+	
+	<div id = "container">
+		<div id = 'world'></div>
+		<div id = 'pacman'></div>
+		<div id = 'ghost'></div>
+		<div id = 'ghost2'></div>
+		<div id = 'score'></div>
+		<div id = 'life'></div>
+		<div id = 'countmoves'></div>
+	</div>
+	<script>
+		var world = [
+			[2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
+			[2,1,1,1,1,1,1,2,1,1,1,2,1,1,1,1,1,1,2],
+			[2,1,2,2,1,2,1,2,1,2,1,2,1,2,1,2,2,1,2],
+			[2,1,1,3,1,2,1,1,1,2,1,1,1,2,1,3,1,1,2],
+			[2,1,2,2,1,2,2,2,1,2,1,2,2,2,1,2,2,1,2],
+			[2,1,2,1,1,1,1,1,1,2,1,1,1,1,1,1,2,1,2],
+			[2,1,2,1,2,2,1,2,2,2,2,2,1,2,2,1,2,1,2],
+			[2,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,2],
+			[2,1,2,2,1,2,0,2,2,0,2,2,0,2,1,2,2,1,2],
+			[2,1,2,2,1,2,0,2,0,0,0,2,0,2,1,2,2,1,2],
+			[2,1,1,1,1,2,0,2,2,2,2,2,0,2,1,1,1,1,2],
+			[2,1,2,2,1,2,0,0,0,0,0,0,0,2,1,2,2,1,2],
+			[2,1,1,2,1,2,1,1,1,1,1,1,1,2,1,2,1,1,2],
+			[2,2,1,2,1,2,1,2,2,2,2,2,1,2,1,2,1,2,2],
+			[2,1,1,2,1,1,1,1,1,2,1,1,1,1,1,2,1,1,2],
+			[2,1,2,2,1,2,2,2,1,2,1,2,2,2,1,2,2,1,2],
+			[2,1,1,1,1,2,1,1,1,1,1,1,1,2,1,1,1,1,2],
+			[2,1,2,1,2,2,1,2,1,2,1,2,1,2,2,1,1,1,2],
+			[2,1,2,3,1,1,1,2,1,3,1,2,1,1,1,3,2,1,2],
+			[2,1,2,2,2,2,1,2,2,2,2,2,1,2,2,2,2,1,2],
+			[2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2],
+			[2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2]
+		];
+
+		var score = 0;
+		var life = 5;
+		var pacman = {
+			x: 1,
+			y: 1
+		}
+		var ghost = {
+			x: 9,
+			y: 9
+		}
+		var ghost2 = {
+			x: 9,
+			y: 9,
+		}
+		var countmoves = 0;
+		
+		// var ghostmove = (Math.random() * 4)
+
+	function displayWorld() {
+		var output = '';
+
+		for(var i = 0; i < world.length; i++) {
+			output += "\n<div class ='row'>\n";
+			for(var j = 0; j < world[i].length; j++){
+				if(world[i][j] == 2) {
+					output += "<div class='brick'></div>";
+				}
+				else if(world[i][j] == 1){
+					output += "<div class='coin'></div>";
+				}
+				else if(world[i][j] == 0){
+					output += "<div class='empty'></div>";
+				}
+				else if(world[i][j] == 3){
+					output += "<div class='cherry'></div>";
+				}
+			}
+			output += "\n</div>";
+		}
+		document.getElementById('world').innerHTML = output;
+	}
+
+		
+	
+
+	function displayPacman() {
+		document.getElementById('pacman').style.left = pacman.x*22+"px";
+		document.getElementById('pacman').style.top = pacman.y*22+"px";
+	}
+	function displayGhost() {
+		document.getElementById('ghost').style.left = ghost.x*22+"px";
+		document.getElementById('ghost').style.top = ghost.y*22+"px";
+	}
+	function displayGhost2() {
+		document.getElementById('ghost2').style.left = ghost2.x*22+"px";
+		document.getElementById('ghost2').style.top = ghost2.y*22+"px";
+	}
+
+
+	function displayScore() {
+		document.getElementById('score').innerHTML = "Score: " + (score - countmoves * 5);
+	}
+
+	function displayLife() {
+		document.getElementById('life').innerHTML = "Life: " + life;
+	}
+
+	function displayCountMoves() {
+		document.getElementById('countmoves').innerHTML = "moves: " + countmoves;
+	}
+
+	displayWorld();
+	displayPacman();
+	displayGhost();
+	displayGhost2();
+	displayScore();
+	displayLife();
+	displayCountMoves();
+
+	document.onkeydown = function(e){
+		countmoves++;
+		if(e.keyCode == 37 && world[pacman.y][pacman.x-1] != 2){
+			pacman.x--;
+			document.getElementById('pacman').style.transform = 'rotate(180deg)';
+		}
+		else if(e.keyCode == 39 && world[pacman.y][pacman.x+1] != 2){
+			pacman.x++;
+			document.getElementById('pacman').style.transform = 'rotate(0deg)';
+		}
+		else if(e.keyCode == 38 && world[pacman.y-1][pacman.x] != 2){
+			pacman.y--;
+			document.getElementById('pacman').style.transform = 'rotate(270deg)';
+		}
+		else if(e.keyCode == 40 && world[pacman.y+1][pacman.x] != 2){
+			pacman.y++;
+			document.getElementById('pacman').style.transform = 'rotate(90deg)';
+		}
+
+		if(pacman.y == ghost.y && pacman.x == ghost.x || pacman.y == ghost2.y && pacman.x == ghost2.x) {
+			alert("You ran into a ghost and lost a life!");
+			score -= 200;
+			life--;
+			displayLife();
+			displayScore();
+		}
+
+		if(world[pacman.y][pacman.x] == 1){
+			world[pacman.y][pacman.x] = 0;
+			displayScore();
+			displayWorld();
+			score += 10;
+		}
+		else if(world[pacman.y][pacman.x] == 3){
+			world[pacman.y][pacman.x] = 0;
+			displayWorld();
+			score += 50;
+			displayScore();	
+		}
+		displayPacman();
+		displayCountMoves();
+		displayScore();
+	}
+
+	window.setInterval(function(){
+			var ghostmove = (Math.random() * 4);
+			console.log(ghostmove);
+			if (ghost.x <= pacman.x && ghost.y <= pacman.y) {
+				if (ghostmove < .1 && world[ghost.y][ghost.x-1] != 2) {
+					ghost.x--;
+				}
+				else if (ghostmove >= .1 && ghostmove < 2 && world[ghost.y][ghost.x+1] != 2) {
+					ghost.x++;
+				}
+				else if (ghostmove >= 2 && ghostmove < 2.1 && world[ghost.y-1][ghost.x] != 2) {
+					ghost.y--;
+				}
+				else if (ghostmove >= 2.1 && ghostmove < 4 && world[ghost.y+1][ghost.x] != 2) {
+					ghost.y++;
+				}
+				displayGhost();
+				
+				if(pacman.y == ghost.y && pacman.x == ghost.x) {
+				alert("You ran into a ghost and lost a life!");
+				life--;
+				score -= 250;
+				displayScore();
+				displayLife();
+				}
+			}
+			else if (ghost.x <= pacman.x && ghost.y > pacman.y) {
+				if (ghostmove < .1 && world[ghost.y][ghost.x-1] != 2) {
+					ghost.x--;
+				}
+				else if (ghostmove >= .1 && ghostmove < 2 && world[ghost.y][ghost.x+1] != 2) {
+					ghost.x++;
+				}
+				else if (ghostmove >= 2 && ghostmove < 3.9 && world[ghost.y-1][ghost.x] != 2) {
+					ghost.y--;
+				}
+				else if (ghostmove >= 3.9 && ghostmove < 4 && world[ghost.y+1][ghost.x] != 2) {
+					ghost.y++;
+				}
+				displayGhost();
+				if(pacman.y == ghost.y && pacman.x == ghost.x) {
+				alert("You ran into a ghost and lost a life!");
+				life--;
+				score -= 250;
+				displayScore();
+				displayLife();
+				}
+			}
+			else if (ghost.x > pacman.x && ghost.y <= pacman.y) {
+				if (ghostmove < 1.9 && world[ghost.y][ghost.x-1] != 2) {
+					ghost.x--;
+				}
+				else if (ghostmove >= 1.9 && ghostmove < 2 && world[ghost.y][ghost.x+1] != 2) {
+					ghost.x++;
+				}
+				else if (ghostmove >= 2 && ghostmove < 2.1 && world[ghost.y-1][ghost.x] != 2) {
+					ghost.y--;
+				}
+				else if (ghostmove >= 2.1 && ghostmove < 4 && world[ghost.y+1][ghost.x] != 2) {
+					ghost.y++;
+				}
+				displayGhost();
+				if(pacman.y == ghost.y && pacman.x == ghost.x) {
+				alert("You ran into a ghost and lost a life!");
+				life--;
+				score -= 250;
+				displayScore();
+				displayLife();
+				}	
+			}
+			else if (ghost.x > pacman.x && ghost.y > pacman.y) {
+				if (ghostmove < 1.9 && world[ghost.y][ghost.x-1] != 2) {
+					ghost.x--;
+				}
+				else if (ghostmove >= 1.9 && ghostmove < 2 && world[ghost.y][ghost.x+1] != 2) {
+					ghost.x++;
+				}
+				else if (ghostmove >= 2 && ghostmove < 3.9 && world[ghost.y-1][ghost.x] != 2) {
+					ghost.y--;
+				}
+				else if (ghostmove >= 3.9 && ghostmove < 4 && world[ghost.y+1][ghost.x] != 2) {
+					ghost.y++;
+				}
+				displayGhost();
+				if(pacman.y == ghost.y && pacman.x == ghost.x) {
+				alert("You ran into a ghost and lost a life!");
+				life--;
+				score -= 250;
+				displayScore();
+				displayLife();
+				}
+			}
+}, 150);
+
+		window.setInterval(function(){
+			var ghostmove2 = (Math.random() * 4);
+			console.log(ghostmove2);
+			if (ghost2.x <= pacman.x && ghost2.y <= pacman.y) {
+				if (ghostmove2 < .1 && world[ghost2.y][ghost2.x-1] != 2) {
+					ghost2.x--;
+				}
+				else if (ghostmove2 >= .1 && ghostmove2 < 2 && world[ghost2.y][ghost2.x+1] != 2) {
+					ghost2.x++;
+				}
+				else if (ghostmove2 >= 2 && ghostmove2 < 2.1 && world[ghost2.y-1][ghost2.x] != 2) {
+					ghost2.y--;
+				}
+				else if (ghostmove2 >= 2.1 && ghostmove2 < 4 && world[ghost2.y+1][ghost2.x] != 2) {
+					ghost2.y++;
+				}
+				displayGhost2();
+				
+				if(pacman.y == ghost2.y && pacman.x == ghost2.x) {
+				alert("You ran into a ghost and lost a life!");
+				life--;
+				score -= 250;
+				displayScore();
+				displayLife();
+		}
+			}
+			else if (ghost2.x <= pacman.x && ghost2.y > pacman.y) {
+				if (ghostmove2 < .1 && world[ghost2.y][ghost2.x-1] != 2) {
+					ghost2.x--;
+				}
+				else if (ghostmove2 >= .1 && ghostmove2 < 2 && world[ghost2.y][ghost2.x+1] != 2) {
+					ghost2.x++;
+				}
+				else if (ghostmove2 >= 2 && ghostmove2 < 3.9 && world[ghost2.y-1][ghost2.x] != 2) {
+					ghost2.y--;
+				}
+				else if (ghostmove2 >= 3.9 && ghostmove2 < 4 && world[ghost2.y+1][ghost2.x] != 2) {
+					ghost2.y++;
+				}
+				displayGhost2();
+				if(pacman.y == ghost2.y && pacman.x == ghost2.x) {
+				alert("You ran into a ghost and lost a life!");
+				life--;
+				score -= 250;
+				displayScore();
+				displayLife();
+		}
+			}
+			else if (ghost2.x > pacman.x && ghost2.y <= pacman.y) {
+				if (ghostmove2 < 1.9 && world[ghost2.y][ghost2.x-1] != 2) {
+					ghost2.x--;
+				}
+				else if (ghostmove2 >= 1.9 && ghostmove2 < 2 && world[ghost2.y][ghost2.x+1] != 2) {
+					ghost2.x++;
+				}
+				else if (ghostmove2 >= 2 && ghostmove2 < 2.1 && world[ghost2.y-1][ghost2.x] != 2) {
+					ghost2.y--;
+				}
+				else if (ghostmove2 >= 2.1 && ghostmove2 < 4 && world[ghost2.y+1][ghost2.x] != 2) {
+					ghost2.y++;
+				}
+				displayGhost2();
+				if(pacman.y == ghost2.y && pacman.x == ghost2.x) {
+				alert("You ran into a ghost and lost a life!");
+				life--;
+				score -= 250;
+				displayScore();
+				displayLife();
+		}
+			}
+			else if (ghost2.x > pacman.x && ghost2.y > pacman.y) {
+				if (ghostmove2 < 1.9 && world[ghost2.y][ghost2.x-1] != 2) {
+					ghost2.x--;
+				}
+				else if (ghostmove2 >= 1.9 && ghostmove2 < 2 && world[ghost2.y][ghost2.x+1] != 2) {
+					ghost2.x++;
+				}
+				else if (ghostmove2 >= 2 && ghostmove2 < 3.9 && world[ghost2.y-1][ghost2.x] != 2) {
+					ghost2.y--;
+				}
+				else if (ghostmove2 >= 3.9 && ghostmove2 < 4 && world[ghost2.y+1][ghost2.x] != 2) {
+					ghost2.y++;
+				}
+				displayGhost2();
+				if(pacman.y == ghost2.y && pacman.x == ghost2.x) {
+				alert("You ran into a ghost and lost a life!");
+				life--;
+				score -= 250;
+				displayScore();
+				displayLife();
+		}
+			}
+}, 150);
+
+	</script>
+</body>
+</html>
+
+
